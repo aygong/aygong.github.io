@@ -2,6 +2,15 @@
   "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-B9V8W5CKZC"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-B9V8W5CKZC');
+</script>
 <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <link rel="stylesheet" href="jemdoc.css" type="text/css" />
@@ -20,8 +29,10 @@
 </td>
 <td id="layout-content">
 <div id="toptitle">
-<h1>Extension</h1>
+<h1>Related Work</h1>
 </div>
+<p>This page lists papers on optimizing age of information in wireless networks under partial system information. Last updated on August 3, 2024.</p>
+<p>Feel free to contact me if you have any queries.</p>
 <h2>Background</h2>
 <p>Information freshness has become an increasingly important performance metric in this era of the Internet of Things. The concept of the age of information (AoI) has been proposed to measure information freshness from a destination’s perspective. This metric is defined as the time elapsed from the moment when <b>the freshest received status update (by a destination)</b> arrived at its source.</p>
 <p>In multi-user uplink systems, the scheduling problems of minimizing the network-wide AoI are challenging, especially in the presence of stochastic status update arrivals. This is mainly because destinations may not know if new status updates have arrived at sources. Most previous work assumed that sources utilized extra feedback to report their status update arrivals. Such feedback may lead to considerable overhead, thereby complicating the implementation of scheduling policies.</p>
@@ -34,7 +45,7 @@
 <img src="assets/trans-func.png" height="60"/> &nbsp;&nbsp;&nbsp;&nbsp;
 <img src="assets/obsr-func.png" height="60"/>
 </p>
-<h2>Related Work</h2>
+<h2>Papers</h2>
 <h3>2020</h3>
 <ul>
 <li><p><a href="https://ieeexplore.ieee.org/document/9348022">Age-of-Information-based Scheduling in Multiuser Uplinks with Stochastic Arrivals: A POMDP Approach</a><br />
@@ -99,10 +110,17 @@ Y. Lu, X. Xu, and X. Huang, in <i>Proc. IEEE/CIC ICCC</i>, 2023<br />
 <i>Remark: fully observable source age / partially observable destination AoI</i></p>
 </li>
 </ul>
+<h3>2024</h3>
 <ul>
-<li><p><a href="https://ieeexplore.ieee.org/document/10349810">Optimizing Age of Information in Uplink Multiuser MIMO Networks with Partial Observations</a><br />
+<li><p><a href="https://arxiv.org/abs/2401.02218">Optimizing Information Freshness in Uplink Multiuser MIMO Networks with Partial Observations</a><br />
 J. Liu, Q. Wang, and H. Chen, in <i>Proc. WiOpt</i>, 2023<br />
 <i>Remark: fully observable destination AoI / partially observable source age</i></p>
+</li>
+</ul>
+<ul>
+<li><p><a href="https://arxiv.org/abs/2406.00720">Age-Gain-Dependent Random Access for Event-Driven Periodic Updating</a><br />
+Y. Zhu, Y. Zhu, A. Gong, Y. Lin, and Y. Zhang, <i>arXiv preprint arXiv:2406.00720</i>, 2024<br />
+<i>Remark: partially observable source age and age gain</i></p>
 </li>
 </ul>
 </td>
