@@ -1,0 +1,219 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B9V8W5CKZC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-B9V8W5CKZC');
+  </script>
+  <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" href="../jemdoc.css" type="text/css" />
+  <title>Optimizing AoI</title>
+</head>
+
+<body>
+  <table summary="Table for page layout." id="tlayout">
+    <tr valign="top">
+      <td id="layout-menu">
+        <div class="menu-category">Home</div>
+        <div class="menu-item"><a href="../index.html">About&nbsp;Me</a></div>
+        <div class="menu-item"><a href="../docu/resume.pdf" target="_blank">CV</a></div>
+        <div class="menu-category">Research</div>
+        <div class="menu-item"><a href="../pub.html">Publications</a></div>
+        <div class="menu-item"><a href="../project.html" class="current">Projects</a></div>
+        <div class="menu-category">Moments</div>
+        <div class="menu-item"><a href="../photo.html">Photos</a></div>
+        <div class="menu-item"><a href="../post.html">Posts</a></div>
+      </td>
+      <td id="layout-content">
+        <div id="toptitle">
+          <h1>Optimizing AoI under Partial System Information</h1>
+        </div>
+        <p>This page lists papers on optimizing age of information in wireless networks under partial system
+          information. Last updated on November 12, 2024.</p>
+        <p>Feel free to contact me if you have any queries.</p>
+        <h2>Background</h2>
+        <p>Information freshness has become an increasingly important performance metric in this era of the Internet of
+          Things. The concept of the age of information (AoI) has been proposed to measure information freshness from a
+          destination’s perspective. This metric is defined as the time elapsed from the moment when <b>the freshest
+            received status update (by a destination)</b> arrived at its source.</p>
+        <p>In multi-user uplink systems, the scheduling problems of minimizing the network-wide AoI are challenging,
+          especially in the presence of stochastic status update arrivals. This is mainly because destinations may not
+          know if new status updates have arrived at sources. Most previous work assumed that sources utilized extra
+          feedback to report their status update arrivals. Such feedback may lead to considerable overhead, thereby
+          complicating the implementation of scheduling policies.</p>
+        <p>
+          <img src="../assets/local-age.png" height="120" /> &nbsp;&nbsp;&nbsp;&nbsp;
+          <img src="../assets/aoi.png" height="120" />
+        </p>
+        <p>To address this limitation, we assume that there is no extra feedback, which results in <b>a scheduling
+            problem under partial system information</b>. A partially observable Markov decision process can be further
+          formulated to characterize the behavior of such a system. Specifically, a destination fully observes the
+          destination AoI of sources and partially observes their source age.</p>
+        <p>
+          <img src="../assets/trans-func.png" height="60" /> &nbsp;&nbsp;&nbsp;&nbsp;
+          <img src="../assets/obsr-func.png" height="60" />
+        </p>
+        <h2>Papers</h2>
+        <h3>2020</h3>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/document/9348022" target="_blank">Age-of-Information-Based Scheduling in Multiuser
+                Uplinks with Stochastic Arrivals: A POMDP Approach</a><br />
+              A. Gong, T. Zhang, H. Chen, and Y. Zhang, in <i>Proc. IEEE GLOBECOM</i>, 2020<br />
+              <i>Remark: fully observable destination AoI / partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        
+        <h3>2021</h3>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/document/9531149" target="_blank">AoI Optimal Dynamic Power Control for IoT
+                Networks: A DRDPG Approach</a><br />
+              K. Chi, M. Wu, Y. Chen, and C. Xu, in <i>Proc. IEEE ICEICT</i>, 2021<br />
+              <i>Remark: fully observable destination AoI / partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/9590543" target="_blank">Partially Observable Minimum-Age
+                Scheduling: The Greedy Policy</a><br />
+              Y. Shao, Q. Cao, S. C. Liew, and H. Chen, <i>IEEE Trans. Commun.</i>, 2022<br />
+              <i>Remark: partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/document/9652918" target="_blank">Age-Based Scheduling in Internet of Things with
+                Bursty Traffic over Time Varying Channels</a><br />
+              B. Yan, X. Wang, C. Xu, and X. Sun, in <i>Proc. ComComAp</i>, 2021<br />
+              <i>Remark: fully observable destination AoI / partially observable source age and channel states</i>
+            </p>
+          </li>
+        </ul>
+
+        <h3>2022</h3>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/9833986" target="_blank">Status Updating with an Energy Harvesting
+                Sensor Under Partial Battery Knowledge</a><br />
+              M. Hatami, M. Leinonen, and M. Codreanu, in <i>Proc. IEEE SPAWC</i>, 2022<br />
+              <i>Remark: fully observable requests, destination battery level, and source age / partially observable
+                source battery level</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/9916209" target="_blank">Timely Monitoring of Dynamic Sources with
+                Observations from Multiple Wireless Sensors</a><br />
+              A. E. Kalør and P. Popovski, <i>IEEE/ACM Trans. Netw.</i>, 2022<br />
+              <i>Remark: partially observable source states and source age</i>
+            </p>
+          </li>
+        </ul>
+
+        <h3>2023</h3>
+        <ul>
+          <li>
+            <p><a href="https://arxiv.org/abs/2303.18104" target="_blank">Status Updating Under Partial Battery Knowledge in Energy
+                Harvesting IoT Networks</a><br />
+              M. Hatami, M. Leinonen, and M. Codreanu, <i>arXiv preprint arXiv:2303.18104</i>, 2023<br />
+              <i>Remark: fully observable requests, destination battery level, and source age / partially observable
+                source battery level</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/10093917" target="_blank">Optimizing Age of Information in
+                Wireless Uplink Networks with Partial Observations</a><br />
+              J. Liu, R. Zhang, A. Gong, and H. Chen, <i>IEEE Trans. Commun.</i>, 2023<br />
+              <i>Remark: fully observable destination AoI / partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/10233345" target="_blank">AoI Minimization for Multi-User Networks
+                with Delayed Feedback</a><br />
+              Y. Lu, X. Xu, and X. Huang, in <i>Proc. IEEE/CIC ICCC</i>, 2023<br />
+              <i>Remark: fully observable source age / partially observable destination AoI</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/document/10349810" target="_blank">Optimizing Information Freshness in Uplink
+                Multiuser MIMO Networks with Partial Observations</a><br />
+              J. Liu, Q. Wang, and H. Chen, in <i>Proc. WiOpt</i>, 2023<br />
+              <i>Remark: fully observable destination AoI / partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/10349817" target="_blank">On the Age-Optimality of
+                Relax-then-Truncate Approach Under Partial Battery Knowledge in Energy Harvesting IoT Networks</a><br />
+              M. Hatami, M. Leinonen, and M. Codreanu, in <i>Proc. WiOpt</i>, 2023<br />
+              <i>Remark: fully observable requests, destination battery level, and source age / partially observable
+                source battery level</i>
+            </p>
+          </li>
+        </ul>
+
+        <h3>2024</h3>
+        <ul>
+          <li>
+            <p><a href="https://arxiv.org/abs/2406.00720" target="_blank">Age-Gain-Dependent Random Access for Event-Driven Periodic
+                Updating</a><br />
+              Y. Zhu, Y. Zhu, A. Gong, Y. Lin, and Y. Zhang, <i>arXiv preprint arXiv:2406.00720</i>, 2024<br />
+              <i>Remark: fully observable destination AoI / partially observable source age and age gain</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://ieeexplore.ieee.org/abstract/document/10619823" target="_blank">Collaborative Optimization of the Age of
+                Information Under Partial Observability</a><br />
+              A. Tahir, K. Cui, B. Alt, A. Rizk, and H. Koeppl, in <i>Proc. IFIP Networking</i>, 2024<br />
+              <i>Remark: partially observable source age</i>
+            </p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            <p><a href="https://arxiv.org/pdf/2411.07179" target="_blank">Joint Age-State Belief is All You Need: Minimizing AoII via
+                Pull-Based Remote Estimation</a><br />
+              I. Cosandal, S. Ulukus, N. Akar, <i>arXiv preprint arXiv:2411.07179</i>, 2024<br />
+              <i>Remark: partially observable source states and source age</i>
+            </p>
+          </li>
+        </ul>
+
+        <h3>2025</h3>
+        <ul>
+          <li>
+            <p><a href="https://arxiv.org/pdf/2501.06688" target="_blank">Optimizing Age of Information Without Knowing the Age of
+                Information</a><br />
+              Z. Zhao and I. Kadota, <i>arXiv preprint arXiv:2501.06688</i>, 2025<br />
+              <i>Remark: partially observable destination AoI and source age</i>
+            </p>
+          </li>
+        </ul>
+
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>

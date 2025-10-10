@@ -1,0 +1,345 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-B9V8W5CKZC"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-B9V8W5CKZC');
+  </script>
+  <meta name="generator" content="jemdoc, see http://jemdoc.jaboc.net/" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <link rel="stylesheet" href="../jemdoc.css" type="text/css" />
+  <title>srsRAN Latency Analysis</title>
+</head>
+
+<body>
+  <table summary="Table for page layout." id="tlayout">
+    <tr valign="top">
+      <td id="layout-menu">
+        <div class="menu-category">Home</div>
+        <div class="menu-item"><a href="../index.html">About&nbsp;Me</a></div>
+        <div class="menu-item"><a href="../docu/resume.pdf" target="_blank">CV</a></div>
+        <div class="menu-category">Research</div>
+        <div class="menu-item"><a href="../pub.html">Publications</a></div>
+        <div class="menu-item"><a href="../project.html" class="current">Projects</a></div>
+        <div class="menu-category">Moments</div>
+        <div class="menu-item"><a href="../photo.html">Photos</a></div>
+        <div class="menu-item"><a href="../post.html">Posts</a></div>
+      </td>
+      <td id="layout-content">
+        <div id="toptitle">
+          <h1>Towards URLLC with srsRAN</h1>
+        </div>
+        <p>This page presents latency analysis and improvement in radio access networks using the <a
+            href="https://www.srslte.com/" target="_blank">srsRAN software</a>. Last updated on July 25, 2025.</p>
+        <p>Feel free to contact me if you have any queries or would like to request access to my master's thesis.</p>
+        <p><font color="E60000"><b>[NEWS]</b></font> Check out our paper "<a
+            href="https://dl.acm.org/doi/pdf/10.1145/3750718.3750743" target="_blank">Towards URLLC with Open-Source 5G Software</a>" 
+          and the associated <a href="https://github.com/aygong/srsRAN_Project_Low_Latency" target="_blank">code repository</a>!</p>
+
+        <style>
+          ul {
+            margin-bottom: 6px;
+          }
+
+          .spacing-before {
+            margin-top: 7px;
+          }
+        </style>
+
+        <h2>1 Background</h2>
+        <h3>1.1 Radio Access Network</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/5g_networks.svg" height="200" />
+        </p>
+        <p>
+          The 5G network consists of two subsystems: the Radio Access Network (RAN) and the Mobile Core.
+        <ul>
+          <li>The RAN corresponds to a distributed set of base stations (named gNB).</li>
+          <li>The Mobile Core provides and ensures Internet connectivity.</li>
+        </ul>
+        </p>
+
+        <h3>1.2 gNB’s Data Processing Pipeline</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/ran_packet_processing_pipeline.svg" height="220" />
+        </p>
+        <p>
+          The functionality of a gNB can be split into the Radio Unit (RU), Distributed Unit (DU), and Central Unit
+          (CU).
+        <ul>
+          <li>The Radio Link Control (RLC) layer handles segmentation and reassembly.</li>
+          <li>The Medium Access Control (MAC) layer handles all real-time scheduling regarding resource allocation.</li>
+          <li>The (upper and lower) physical (PHY) layer handles (de)coding and (de)modulation.</li>
+          <li>The radio head (RH) converts radio frequency signals into samples and vice versa.</li>
+        </ul>
+        </p>
+
+        <h3>1.3 5G Frame Structure</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/5g_frame_structure.svg" height="220" />
+        </p>
+        <p>
+          The <a href="https://www.sharetechnote.com/html/5G/5G_FrameStructure.html" target="_blank">5G frame structure</a> is designed
+          to be more flexible than its predecessors.<br />
+          At the heart of this design is the concept of numerology, labelled by <i>µ</i>.
+        <ul>
+          <li>For instance, setting <i>µ</i> = 1, each slot has a duration of 0.5 ms.</li>
+        </ul>
+        </p>
+
+        <h2>2 Latency Analysis</h2>
+        <h3>2.1 Functionality of Radio Units</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/ru_functionalities.svg" height="150" />
+        </p>
+        <p>
+          The <font color="#6AA84F">RU-downlink (DL) processor</font> performs <font color="#6AA84F">OFDM modulation
+          </font>.
+        <ul>
+          <li>It converts DL frequency-domain symbols into DL time-domain samples.</li>
+        </ul>
+        The <font color="#CC0000">RU-uplink (UL) processor</font> performs <font color="#CC0000">OFDM demodulation
+        </font>.
+        <ul class="spacing-before">
+          <li>It converts UL time-domain samples into UL frequency-domain symbols.</li>
+        </ul>
+        </p>
+
+        <h3>2.2 Latency in Radio Units</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/ru_latency_working_procedure.svg" width="740" />
+        </p>
+        <p>
+          ① When RH slot <i>s</i> begins, the RH receives the UL signal from the air, converts it into UL samples, and
+          then forwards them to the software interface.<br />
+          ② After a short time, the <font color="#CC0000">RU-UL processor</font> receives these samples for <font
+            color="#CC0000">UP slot <i>s</i></font> from the software interface and demodulates them into UL
+          symbols.<br />
+          ③ In <font color="#6AA84F">DP slot <i>s</i> + <i>H</i></font>, the <font color="#6AA84F">RU-DL processor
+          </font> first waits for the <font color="#CC0000">RU-UL processor</font> to finish the reception and
+          processing in <font color="#CC0000">UP slot <i>s</i></font>. It then prepares DL samples for <font
+            color="#6AA84F">DP slot <i>s</i> + <i>H</i></font> and forwards them to the software interface. After this,
+          the software interface forwards these DL samples to the RH.
+          <br />
+          ④ There exists an <i>H</i>-slot offset between the <font color="#6AA84F">RU-DL processor</font> and the RH,
+          implemented for DL radio preparation time (e.g., USB and RF chain).
+        </p>
+
+        <h3>2.3 Functionality of Distributed Units</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/du_functionalities.svg" height="180" />
+        </p>
+        <p>
+          The <font color="#3333B3">DU processor</font> reads DL segments from the RLC layer and converts them into DL
+          frequency-domain symbols, and vice versa.<br />
+          It handles all real-time scheduling regarding physical resource allocation.
+        </p>
+
+        <h3>2.4 Latency in Distributed Units (Downlink)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/du_downlink_latency_working_procedure.svg" width="740" />
+        </p>
+        <p>
+          ① When the <font color="#6AA84F">RU-DL processor</font> finishes preparing DL samples for <font
+            color="#6AA84F">DP slot <i>s</i> + <i>H</i> − 1</font>, it notifies the <font color="#3333B3">DU processor
+          </font> of the beginning of <font color="#3333B3">DU slot <i>s</i> + <i>H</i> + <i>M</i></font>. When it
+          receives the notification, the <font color="#3333B3">DU processor</font> first decides on resource allocation
+          for DL transmission and/or UL reception.<br />
+          ② If <font color="#3333B3">the current DU slot</font> is a DL slot, the <font color="#3333B3">DU processor
+          </font> then reads DL segments from the RLC layer and converts them into DL symbols.<br />
+          ③ These symbols wait in the computer’s memory and will be accessed by the <font color="#6AA84F">RU-DL
+            processor</font> after <i>M</i> slots, i.e., at the end of <font color="#6AA84F">DP slot <i>s</i> + <i>H</i>
+            + <i>M</i></font>.<br />
+          There exists an <i>M</i>-slot offset between the <font color="#6AA84F">RU-DL processor</font> and the <font
+            color="#3333B3">DU processor</font>, it is used by the <font color="#3333B3">DU processor</font> to prepare
+          resource allocation results and DL frequency-domain symbols in advance.
+          This offset provides a margin for handling <font color="#3333B3">unexpected slowdowns in the DU processor
+          </font>, thus ensuring <font color="#6AA84F">the uninterrupted operation of the RU-DL processor</font>.
+        </p>
+
+        <h3>2.5 An Example for the Case of <i>M</i> = 1</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/du_offset_example.svg" width="700" />
+        </p>
+        <p>
+          In <font color="#3333B3">DU slot <i>s</i> + 2</font>, a sudden slowdown in the DU’s execution occurs. The
+          execution time in <font color="#3333B3">this DU slot</font> is much longer than usual.<br />
+          As the <font color="#3333B3">DU processor</font> prepares the DL symbols one slot in advance, the <font
+            color="#6AA84F">RU-DL processor</font> can still access the symbols at the end of <font color="#6AA84F">DP
+            slot <i>s</i> + 2</font>.<br />
+          The time offset restores once the DU resumes normal execution.
+        </p>
+
+        <h3>2.6 Latency in Distributed Units (Uplink)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/du_uplink_latency_working_procedure.svg" width="740" />
+        </p>
+        <p>
+          ④ When the <font color="#CC0000">RU-UL processor</font> finishes preparing UL symbols for <font
+            color="#CC0000">UP slot <i>s</i></font>, it forwards these symbols to the <font color="#3333B3">DU processor
+          </font> immediately.<br />
+          ⑤ Using the resource allocation results decided (<i>H</i> + <i>M</i>) slots ago (in <font color="#3333B3">DU
+            slot <i>s</i></font>), the <font color="#3333B3">DU processor</font> converts the UL symbols into UL
+          segments.
+        </p>
+
+        <h3>2.7 Summary of Slot Offsets</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/slot_offset_overview.svg" height="240" />
+        </p>
+        <p>
+          At any given time point, there exist an <i>H</i>-slot offset and an <i>M</i>-slot offset.
+        <ul>
+          <li>The <i>H</i>-slot offset is between the <font color="#6AA84F">RU-DL processor</font> and the RH.</li>
+          <li>The <i>M</i>-slot offset is between the <font color="#3333B3">DU processor</font> and the <font
+              color="#6AA84F">RU-DL processor</font>.</li>
+        </ul>
+        These offsets arise from system implementation considerations.
+        </p>
+
+
+        <h3>2.8 Sources of Latency</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/sr_based_access.svg" height="100" /> &nbsp;&nbsp;&nbsp;&nbsp;
+          <img src="../assets/srsRAN/time_division_duplex.svg" height="80" />
+        </p>
+        <p>
+          The latency introduced by system implementation: <i>H</i>-slot and <i>M</i>-slot offsets<br />
+          The latency introduced by 5G specifications: <br />
+        <ul>
+          <li>Scheduling Request (SR): When a UE has UL data to send, it first sends an SR to the gNB. The gNB then
+            schedules and sends an UL grant to the UE. The UE transmits the UL data to the gNB after receiving the UL
+            grant.</li>
+          <li>Time Division Duplex (TDD): The TDD uses the same frequency band for both DL and UL transmissions. Each
+            slot within a TDD period is thus specifically designated to be DL, UL, or mixed.</li>
+        </ul>
+        </p>
+
+        <h3>2.9 Latency Breakdown (srsRAN)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/tdd_4211.svg" width="570" />
+        </p>
+        <p>
+          Steps ③ to ⑤: DL one-way latency > (<i>H</i> + <i>M</i> + 1) × 0.5 ms = 2.5 ms<br />
+          Steps ① to ⑥: UL one-way latency > 9 × 0.5 ms = 4.5 ms<br />
+          * <i>K</i>2 (in slots) represents the time delay between a DCI slot and the corresponding PUSCH slot, allowing
+          <a href="https://www.sharetechnote.com/html/5G/5G_ResourceAllocation.html#Time_Domain_Allocation_PUSCH" target="_blank">UEs to
+            prepare PUSCH data</a>.
+        </p>
+
+        <h2>3 Latency Improvement</h2>
+        <h3>3.1 Latency in Radio Units (Recall)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/ru_latency_working_procedure_limitation.svg" width="740" />
+        </p>
+        <p>
+          The <font color="#6AA84F">RU-DL processor</font> always prepares DL samples at the end of <font
+            color="#6AA84F">a DP slot</font>.
+        <ul>
+          <li>This introduces <font color="#FF0000">extra latency</font> if these DL symbols are ready at the beginning
+            of <font color="#6AA84F">a DP slot</font> or even earlier.</li>
+        </ul>
+        <i>H</i> is a constant and cannot be adjusted (e.g., <i>H</i> = 3 for Numerology 1).
+        </p>
+
+        <h3>3.2 Preparing Samples in Advance (M1)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/ru_latency_working_procedure_modify.svg" width="740" />
+        </p>
+        <p>
+          Instead of waiting for the <font color="#CC0000">RU-UL processor</font>, the <font color="#6AA84F">RU-DL
+            processor</font> prepares DL samples at the beginning of <font color="#6AA84F">a DP slot</font>.
+        <ul>
+          <li>This allows the <font color="#6AA84F">RU-DL processor</font> to <font color="#FF0000">prepare DL samples
+              in advance</font>.</li>
+        </ul>
+        <i>H</i> can be adjusted through external configuration (e.g., <i>H</i> = 1).
+        </p>
+
+        <h3>3.3 Latency Breakdown (M1)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/tdd_4211_H.svg" width="570" />
+        </p>
+        <p>
+          Steps ③ to ⑤: DL one-way latency > (<i>H</i> + <i>M</i> + 1) × 0.5 ms = 1.5 ms<br />
+          Steps ① to ⑥: UL one-way latency > 9 × 0.5 ms = 4.5 ms
+        </p>
+
+        <h3>3.4 Event-Driven Symbol Transforming (M2)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/du_downlink_latency_working_procedure_modify.svg" width="740" />
+        </p>
+        <p>
+          ① When <font color="#3333B3">DU slot <i>s</i></font> begins, the <font color="#3333B3">DU processor</font>
+          starts to prepare resource allocation results and DL symbols.<br />
+          ② In the meantime, the <font color="#6AA84F">RU-DL processor</font> enters a <font color="#FF0000">
+            busy-waiting state</font>.
+        <ul>
+          <li>The <font color="#6AA84F">RU-DL processor</font> keeps checking if the DL symbols are ready.</li>
+        </ul>
+        ③ Once the condition is met, the <font color="#6AA84F">RU-DL processor</font> accesses the DL symbols.
+        </p>
+
+        <h3>3.5 Latency Breakdown (M1 + M2)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/tdd_4211_M.svg" width="570" />
+        </p>
+        <p>
+          Steps ③ to ⑤: DL one-way latency > (<i>H</i> + <i>M</i> + 1) × 0.5 ms = 1 ms<br />
+          Steps ① to ⑥: UL one-way latency > 9 × 0.5 ms = 2.5 ms
+        </p>
+
+        <h2>4 Evaluation</h2>
+        <h3>4.1 Latency Results: Baseline (srsRAN)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/baseline_pdf.svg" height="220" />
+        </p>
+        <p>
+          The DL one-way latency mainly spans from 3 ms and 4.5 ms.<br />
+          The UL one-way latency mainly spans from 6 ms to 8.5 ms.<br />
+          The results comply with the lower bounds 2.5 ms and 4.5 ms.
+        </p>
+
+        <h3>4.2 Latency Results: Baseline vs M1 (Preparing Samples in Advance)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/M1_pdf.svg" height="220" />
+        </p>
+        <p>
+          The distribution of the DL one-way latency has shifted to the left by <font color="#00B050">1 ms</font>.<br />
+          The distribution of the UL one-way latency remains unchanged.<br />
+          The results comply with the lower bounds 1.5 ms and 4.5 ms.
+        </p>
+
+        <h3>4.3 Latency Results: Baseline vs M1 + M2 (Event-Driven Symbol Transforming)</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/M2_pdf.svg" height="220" />
+        </p>
+        <p>
+          The distribution of the DL one-way latency has shifted to the left by <font color="#00B050">1.5 ms</font>
+          .<br />
+          The distribution of the UL one-way latency has shifted to the left by <font color="#00B050">2 ms</font>.<br />
+          The results comply with the lower bounds 1 ms and 2.5 ms.
+        </p>
+
+        <h3>4.4 Overall Comparison</h3>
+        <p style="margin-top: 15px;">
+          <img src="../assets/srsRAN/mean_latency_bar.svg" height="220" />
+        </p>
+        <p>
+          We improve one-way latency for <font color="#FF0000">DL by 40.67%</font> and for <font color="#FF0000">UL by
+            26.75%</font>.<br />
+          The previous results validate both our latency analysis and improvement.
+        </p>
+
+      </td>
+    </tr>
+  </table>
+</body>
+
+</html>
