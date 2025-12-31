@@ -366,3 +366,26 @@ table.imgtable, table.imgtable td {
     border: none;
     text-align: left;
 }
+
+blockquote {
+  background-color: #f5f5f5;
+  border-left: 4px solid #ccc;
+  margin: 0em 0em;
+  padding: 0.5em 0.5em;
+  font-style: italic;
+  width: 180px;
+  height: 15px;
+
+  display: flex;
+  align-items: center;      /* vertical centering */
+  justify-content: center;  /* horizontal centering */
+  
+  font-family: 'Cormorant Garamond', 'Garamond', 'Georgia', serif;
+  font-size: 1.1em;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+blockquote p {
+  margin: 0;
+}
