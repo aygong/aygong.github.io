@@ -381,7 +381,7 @@ blockquote {
   justify-content: center;  /* horizontal centering */
   
   font-family: 'Cormorant Garamond', 'Garamond', 'Georgia', serif;
-  font-size: 1.1em;
+  font-size: 1.0em;
   color: #555;
   letter-spacing: 0.5px;
 }
