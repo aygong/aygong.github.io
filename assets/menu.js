@@ -23,8 +23,8 @@
       item("pub.html", "Publications", "publications") +
       item("project.html", "Projects", "projects") +
       '<div class="menu-category">Moments</div>' +
-      item("photo.html", "Photos", "photos") +
       item("post.html", "Posts", "posts") +
+      item("photo.html", "Photos", "photos") +
     "</td>"
   );
 })();
